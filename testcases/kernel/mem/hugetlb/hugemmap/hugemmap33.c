@@ -25,6 +25,7 @@
 #include <sys/wait.h>
 #include <sys/vfs.h>
 #include <sys/statfs.h>
+#include <sys/mount.h>
 
 #include "hugetlb.h"
 #include "tst_safe_macros.h"
@@ -51,7 +52,7 @@ static void verify_quota_stat(int line, long tot, long free, long avail)
 
 	SAFE_STATFS(quota_mnt, &s);
 
-	if (s.f_blocks != tot || s.f_bfree != free || s.f_bavail != avail) {
+	if ((long)s.f_blocks != tot || (long)s.f_bfree != free || (long)s.f_bavail != avail) {
 		tst_res_(NULL, line, TFAIL,
 			"Bad quota counters: total=%li (expected %li), "
 			"free=%li (expected %li), avail=%li (expected %li)",
